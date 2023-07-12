@@ -4,4 +4,4 @@ Simple calculator to carry out basic arithmetic operations. Calculations are don
 
 Calculations truncates the decimal points to `4 d.p.`. `A/C` clears the whole entry while `C` clears the last number entered, if any. The maximum characters allowed to be keyed in to the calculator is 10.
 
-Use the calculator [here](https://kshan29.github.io/Calculator/)
+Use the calculator [here](https://kshan29.github.io/Calculator/).
