@@ -80,3 +80,23 @@ body {
   flex: 2;
   padding: 7px;
 }
+
+.plus-minus:after {
+  content: "\00B1";
+}
+
+.divide:after {
+  content: "\00F7";
+}
+
+.multiply:after {
+  content: "\00D7";
+}
+
+.minus:after {
+  content: "\2212";
+}
+
+.plus:after {
+  content: "\002B";
+}
