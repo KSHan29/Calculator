@@ -5,9 +5,9 @@ let equalPressed = false;
 
 function updateDisplay(calculated) {
   let display = document.querySelector(".display");
-
+  console.log(currentValue);
   if (currentValue == "") {
-    display.textContent = "";
+    display.textContent = "0";
     return;
   }
 
@@ -36,9 +36,6 @@ function updateDisplay(calculated) {
   } else {
     display.textContent = currentValue;
   }
-
-  console.log(calculation);
-  console.log(currentValue);
 }
 
 function clearDisplay() {
@@ -92,6 +89,9 @@ function registerNumber(e) {
 }
 
 function registerBinaryOperator(e) {
+  if (currentValue == "") {
+    return;
+  }
   if (op != "") {
     calculate();
   }
@@ -153,6 +153,7 @@ function addListeners() {
 
 function init() {
   addListeners();
+  updateDisplay();
 }
 
 init();
