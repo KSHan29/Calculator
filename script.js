@@ -11,6 +11,10 @@ function updateDisplay(calculated) {
     return;
   }
 
+  if (currentValue == "-") {
+    currentValue = "";
+  }
+
   if (currentValue == "") {
     display.textContent = "0";
     return;
@@ -95,13 +99,14 @@ function registerNumber(e) {
 
 function registerBinaryOperator(e) {
   if (currentValue == "") {
+    op = e.target.name;
     return;
   }
   if (op != "") {
     calculate();
   }
   calculation = currentValue;
-  op = e.target.textContent;
+  op = e.target.name;
   updateDisplay(true);
   currentValue = "";
 }
@@ -118,13 +123,13 @@ function equalOperator() {
 function calculate() {
   let calculationTemp = Number(calculation);
   let currentValueTemp = Number(currentValue);
-  if (op == "+") {
+  if (op == "plus") {
     currentValueTemp = calculationTemp + currentValueTemp;
-  } else if (op == "-") {
+  } else if (op == "minus") {
     currentValueTemp = calculationTemp - currentValueTemp;
-  } else if (op == "*") {
+  } else if (op == "multiply") {
     currentValueTemp = calculationTemp * currentValueTemp;
-  } else if (op == "/") {
+  } else if (op == "divide") {
     currentValueTemp = calculationTemp / currentValueTemp;
   } else {
     console.log("Error");
