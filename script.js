@@ -5,7 +5,12 @@ let equalPressed = false;
 
 function updateDisplay(calculated) {
   let display = document.querySelector(".display");
-  console.log(currentValue);
+
+  if (currentValue == "Infinity") {
+    display.textContent = "Stack Overflow...";
+    return;
+  }
+
   if (currentValue == "") {
     display.textContent = "0";
     return;
