@@ -97,9 +97,18 @@ function registerNumber(e) {
   updateDisplay();
 }
 
+function removeOperatorsBoxShadow() {
+  const operators = document.querySelectorAll(".operator");
+  operators.forEach((operator) => (operator.style["box-shadow"] = ""));
+}
+
 function registerBinaryOperator(e) {
   if (currentValue == "") {
-    op = e.target.name;
+    if (op != "") {
+      op = e.target.name;
+      removeOperatorsBoxShadow();
+      e.target.style["box-shadow"] = "0 0 3px 3px white";
+    }
     return;
   }
   if (op != "") {
@@ -108,6 +117,8 @@ function registerBinaryOperator(e) {
   calculation = currentValue;
   op = e.target.name;
   updateDisplay(true);
+  removeOperatorsBoxShadow();
+  e.target.style["box-shadow"] = "0 0 3px 3px white";
   currentValue = "";
 }
 
@@ -136,6 +147,7 @@ function calculate() {
   }
   currentValue = currentValueTemp.toString();
   calculation = "";
+  removeOperatorsBoxShadow();
   updateDisplay(true);
 }
 

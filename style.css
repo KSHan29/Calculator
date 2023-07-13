@@ -50,6 +50,11 @@ body {
   gap: 10px;
 }
 
+.number:hover,
+.special-button:hover {
+  transform: scale(1.05);
+}
+
 .number,
 .special-button {
   flex: 1;
