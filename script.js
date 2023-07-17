@@ -2,6 +2,8 @@ let currentValue = "";
 let calculation = "";
 let op = "";
 let equalPressed = false;
+let operators = ["Backspace", ".", "Control", "=", "+", "-", "*", "/", "~"];
+let commandPressed = false;
 
 function updateDisplay(calculated) {
   let display = document.querySelector(".display");
@@ -22,6 +24,14 @@ function updateDisplay(calculated) {
 
   if (currentValue.slice(-1) == ".") {
     display.textContent = currentValue;
+    return;
+  }
+
+  if (currentValue.indexOf("e-") != -1) {
+    let toDisplay = currentValue.slice(0, 5);
+    let exponentPrefix = currentValue.indexOf("e-");
+    let exponent = currentValue.slice(exponentPrefix + 2);
+    display.textContent = toDisplay + `e-${exponent}`;
     return;
   }
 
@@ -86,15 +96,28 @@ function dotDisplay() {
   updateDisplay();
 }
 
-function registerNumber(e) {
+function registerNumber(num) {
   if (equalPressed) {
     currentValue = "";
     equalPressed = false;
   } else if (currentValue.length > 9) {
     return;
   }
-  currentValue += e.target.textContent;
+
+  currentValue += num;
   updateDisplay();
+}
+
+function registerNumberClicking(e) {
+  registerNumber(e.target.textContent);
+}
+
+function registerNumberTyping(e) {
+  if (e.key < "0" || e.key > "9") {
+    return;
+  }
+
+  registerNumber(e.key);
 }
 
 function removeOperatorsBoxShadow() {
@@ -102,24 +125,31 @@ function removeOperatorsBoxShadow() {
   operators.forEach((operator) => (operator.style["box-shadow"] = ""));
 }
 
-function registerBinaryOperator(e) {
+function registerBinaryOperator(input) {
+  const opStyle = document.querySelector(`.${input}`);
   if (currentValue == "") {
     if (op != "") {
-      op = e.target.name;
+      op = input;
       removeOperatorsBoxShadow();
-      e.target.style["box-shadow"] = "0 0 3px 3px white";
+      opStyle.style["box-shadow"] = "0 0 3px 3px white";
     }
     return;
   }
+
   if (op != "") {
     calculate();
   }
+
   calculation = currentValue;
-  op = e.target.name;
+  op = input;
   updateDisplay(true);
   removeOperatorsBoxShadow();
-  e.target.style["box-shadow"] = "0 0 3px 3px white";
+  opStyle.style["box-shadow"] = "0 0 3px 3px white";
   currentValue = "";
+}
+
+function binaryClicked(e) {
+  registerBinaryOperator(e.target.name);
 }
 
 function equalOperator() {
@@ -129,6 +159,42 @@ function equalOperator() {
   equalPressed = true;
   calculate();
   op = "";
+}
+
+function handleOperatorsTyping(e) {
+  if (!operators.includes(e.key)) {
+    return;
+  }
+
+  if (e.key == "Backspace") {
+    if (commandPressed) {
+      clearDisplay();
+    } else {
+      backspaceDisplay();
+    }
+  } else if (e.key == ".") {
+    dotDisplay();
+  } else if (e.key == "=") {
+    equalOperator();
+  } else if (e.key == "*") {
+    registerBinaryOperator("multiply");
+  } else if (e.key == "+") {
+    registerBinaryOperator("plus");
+  } else if (e.key == "-") {
+    registerBinaryOperator("minus");
+  } else if (e.key == "/") {
+    registerBinaryOperator("divide");
+  } else if (e.key == "Control") {
+    commandPressed = false;
+  } else if (e.key == "~") {
+    plusMinusDisplay();
+  }
+}
+
+function handleACTyping(e) {
+  if (e.key == "Control") {
+    commandPressed = true;
+  }
 }
 
 function calculate() {
@@ -161,16 +227,19 @@ function addListeners() {
   let dot = document.querySelector(".dot");
 
   numbers.forEach((number) => {
-    number.addEventListener("click", registerNumber);
+    number.addEventListener("click", registerNumberClicking);
   });
   operators.forEach((operator) => {
-    operator.addEventListener("click", registerBinaryOperator);
+    operator.addEventListener("click", binaryClicked);
   });
   equal.addEventListener("click", equalOperator);
   clear.addEventListener("click", clearDisplay);
   backspace.addEventListener("click", backspaceDisplay);
   plusMinus.addEventListener("click", plusMinusDisplay);
   dot.addEventListener("click", dotDisplay);
+  document.addEventListener("keyup", registerNumberTyping);
+  document.addEventListener("keyup", handleOperatorsTyping);
+  document.addEventListener("keydown", handleACTyping);
 }
 
 function init() {
